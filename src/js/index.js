@@ -9,9 +9,7 @@ const catInfoDiv = document.querySelector('.cat-info');
 const loaderEl = document.querySelector('.loader');
 const errorEl = document.querySelector('.error');
 
-//  завантаження/оновлення сторінки
-breedSelectEl.style.display = 'none';
-loaderEl.style.display = 'block';
+
 
 //  генеруємо html розмітку  для породи кота
 function optionValue(data) {
@@ -27,8 +25,7 @@ fetchBreeds()
   .then(response => {
     const breeds = response.data;
     breedSelectEl.innerHTML = optionValue(breeds);
-    breedSelectEl.style.display = 'block';
-    loaderEl.style.display = 'none';
+ 
 
     new SlimSelect({
       select: '.breed-select',
@@ -80,4 +77,3 @@ function informationAboutCat(event) {
 }
 
 
-console.log('err')
