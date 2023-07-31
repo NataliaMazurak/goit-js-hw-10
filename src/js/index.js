@@ -9,8 +9,6 @@ const catInfoDiv = document.querySelector('.cat-info');
 const loaderEl = document.querySelector('.loader');
 const errorEl = document.querySelector('.error');
 
-
-
 //  генеруємо html розмітку  для породи кота
 function optionValue(data) {
   return data
@@ -18,14 +16,13 @@ function optionValue(data) {
     .join('');
 }
 
-//  робило запит на сервер щоб отримати список  порід котів та 
+//  робило запит на сервер щоб отримати список  порід котів та
 // заповнюємо елемент вибору породи (breedSelectEl) зі спрощеними значеннями за допомогою
-// optionValue  
+// optionValue
 fetchBreeds()
   .then(response => {
     const breeds = response.data;
     breedSelectEl.innerHTML = optionValue(breeds);
- 
 
     new SlimSelect({
       select: '.breed-select',
@@ -39,13 +36,18 @@ fetchBreeds()
     loaderEl.style.display = 'none';
   });
 
-  // асинхр.функ.loadCatInfo, яка отримує інформацію про кота 
-  // на основі обраної породи і відображає її у відповідному розділі (catInfoDiv):
+
+
+// асинхр.функ.loadCatInfo, яка отримує інформацію про кота
+// на основі обраної породи і відображає її у відповідному розділі (catInfoDiv):
 
 async function loadCatInfo(breedId) {
   loaderEl.style.display = 'block';
+  
 
   try {
+    catInfoDiv.innerHTML = '';
+
     const response = await fetchCatByBreed(breedId);
     const catData = response.data[0];
 
@@ -60,12 +62,14 @@ async function loadCatInfo(breedId) {
 
     catInfoDiv.innerHTML = markup;
     loaderEl.style.display = 'none';
+
   } catch (error) {
     console.error('Error:', error);
     Notiflix.Report.warning('Error', 'Oops! Something went wrong!');
 
     breedSelectEl.style.display = 'none';
     errorEl.classList.add('active');
+    catInfoDiv.innerHTML = '';
     loaderEl.style.display = 'none';
   }
 }
@@ -73,7 +77,6 @@ async function loadCatInfo(breedId) {
 breedSelectEl.addEventListener('change', informationAboutCat);
 function informationAboutCat(event) {
   const selectedBreedId = event.target.value;
+  errorEl.classList.remove('active');
   loadCatInfo(selectedBreedId);
 }
-
-
